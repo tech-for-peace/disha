@@ -109,7 +109,7 @@ func getVideosFromPlaylist(playlistID string) ([]videoMeta, error) {
 			} `json:"items"`
 		}
 		if err := json.NewDecoder(resp.Body).Decode(&respstruct); err != nil {
-			return nil, fmt.Errorf("error decoding response while getting videos from playlist [%v]: %v", playlistID, err)
+			return nil, fmt.Errorf("error decoding response in getting videos from playlist [%v]: %v", playlistID, err)
 		}
 		if len(respstruct.Items) == 0 {
 			break

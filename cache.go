@@ -88,9 +88,14 @@ func (c *videoCache) download() error {
 	return c.save()
 }
 
-func (c *videoCache) setup() error {
+func (c *videoCache) setup(updateCache bool) error {
+	if updateCache {
+		log.Println("update for cache requested!")
+		return c.download()
+	}
+
 	if _, err := os.Stat(cacheFile); err == nil {
-		log.Println("cache file already exists, no need to hit APIs")
+		log.Println("cache file already exists, no need to download")
 		return c.load()
 	} else if !os.IsNotExist(err) {
 		return fmt.Errorf("error checking for cache file: %w", err)

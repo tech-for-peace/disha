@@ -33,9 +33,10 @@ func main() {
 	durationMax := flag.Duration("maxDuration", 0, "filter by maximum duration [such as 30s, 20m, 1h]")
 	publishYear := flag.Int("publishYear", 0, "filter by publish year [such as 2022, 2023, 2024]")
 	source := flag.String("source", "", "filter by source [youtube, tt]")
+	updateCache := flag.Bool("update", false, "update cache before filtering")
 	flag.Parse()
 
-	if err := cache.setup(); err != nil {
+	if err := cache.setup(*updateCache); err != nil {
 		panic(err)
 	}
 
