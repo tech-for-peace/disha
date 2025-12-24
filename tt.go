@@ -49,7 +49,11 @@ func getContentForLang(lang string) ([]videoMeta, error) {
 	if resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("bad http status [%v] while geting video list for lang [%v]", resp.Status, lang)
 	}
-	defer resp.Body.Close()
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+			log.Printf("error while closing response body for lang %s: %v", lang, err)
+		}
+	}()
 
 	var respstruct struct {
 		Data []struct {

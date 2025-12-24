@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 )
@@ -14,7 +15,6 @@ const (
 	ttHandle  = "@TimelessToday"
 	prHandle  = "@PremRawatOfficial"
 
-	youTubeAPIKey     = "" // TODO: add it!
 	youTubeVideoURL   = "https://www.youtube.com/watch?v=%v"
 	baseYouTubeAPIURL = "https://www.googleapis.com/youtube/v3"
 	playlistURL       = baseYouTubeAPIURL + "/channels?part=contentDetails&forHandle=%v&key=%v"
@@ -44,6 +44,7 @@ func getYouTubeContent() ([]videoMeta, error) {
 }
 
 func getPlaylistID(handle string) (string, error) {
+	youTubeAPIKey := os.Getenv("YOUTUBE_API_KEY")
 	resp, err := httpClient.Get(fmt.Sprintf(playlistURL, handle, youTubeAPIKey))
 	if err != nil {
 		return "", fmt.Errorf("error getting playlist ID for [%v]: %v", handle, err)
@@ -51,7 +52,11 @@ func getPlaylistID(handle string) (string, error) {
 	if resp.StatusCode != http.StatusOK {
 		return "", fmt.Errorf("error getting playlist ID for [%v]: %v", handle, resp.Status)
 	}
-	defer resp.Body.Close()
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+			log.Printf("error while closing response body for handle %s: %v", handle, err)
+		}
+	}()
 
 	var respstruct struct {
 		Items []struct {
@@ -73,8 +78,9 @@ func getPlaylistID(handle string) (string, error) {
 }
 
 func getVideosFromPlaylist(playlistID string) ([]videoMeta, error) {
-	var videos []videoMeta
+	youTubeAPIKey := os.Getenv("YOUTUBE_API_KEY")
 
+	var videos []videoMeta
 	nextPageToken := ""
 	pageNo := 0
 	for {
@@ -89,7 +95,11 @@ func getVideosFromPlaylist(playlistID string) ([]videoMeta, error) {
 		if resp.StatusCode != http.StatusOK {
 			return nil, fmt.Errorf("error getting videos from playlist [%v]: %v", playlistID, resp.Status)
 		}
-		defer resp.Body.Close()
+		defer func() {
+			if err := resp.Body.Close(); err != nil {
+				log.Printf("error while closing response body for playlist %s: %v", playlistID, err)
+			}
+		}()
 
 		var respstruct struct {
 			NextPageToken string `json:"nextPageToken"`
@@ -154,6 +164,7 @@ func getVideosFromPlaylist(playlistID string) ([]videoMeta, error) {
 }
 
 func getMetaForYouTubeVideo(videoID string) (string, time.Duration, error) {
+	youTubeAPIKey := os.Getenv("YOUTUBE_API_KEY")
 	resp, err := httpClient.Get(fmt.Sprintf(videoMetaURL, videoID, youTubeAPIKey))
 	if err != nil {
 		return "", 0, fmt.Errorf("error getting meta for video [%v]: %v", videoID, err)
@@ -161,7 +172,11 @@ func getMetaForYouTubeVideo(videoID string) (string, time.Duration, error) {
 	if resp.StatusCode != http.StatusOK {
 		return "", 0, fmt.Errorf("error getting meta for video [%v]: %v", videoID, resp.Status)
 	}
-	defer resp.Body.Close()
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+			log.Printf("error while closing response body for video %s: %v", videoID, err)
+		}
+	}()
 
 	var respstruct struct {
 		Items []struct {
