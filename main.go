@@ -41,6 +41,10 @@ func main() {
 		panic(err)
 	}
 
+	if *updateCache {
+		return
+	}
+
 	if *source != "" && *source == "tt" {
 		*source = "timelesstoday"
 	}
