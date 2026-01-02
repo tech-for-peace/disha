@@ -9,10 +9,14 @@ import (
 // (such as language) before the cache is used elsewhere in the application.
 func customizeCache(cache *videoCache) {
 	// Language for this video is English.
-	if video, exists := cache.get("1FVPtXv2pWU"); exists {
-		video.Language = "en"
-		cache.set(video)
-		log.Printf("Updated video %s language to %s", video.VideoID, video.Language)
+	// UXV4hcudGo0 & 1FVPtXv2pWU videos are in english
+	toEnglish := []string{"UXV4hcudGo0", "1FVPtXv2pWU"}
+	for _, videoID := range toEnglish {
+		if video, exists := cache.get(videoID); exists {
+			video.Language = "en"
+			cache.set(video)
+			log.Printf("Updated video %s language to %s", video.VideoID, video.Language)
+		}
 	}
 
 	// Delete videos from the cache.
