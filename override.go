@@ -23,7 +23,7 @@ func customizeCache(cache *videoCache) {
 	// Add AajTak video
 	video := videoMeta{
 		VideoID: "01vCqZoMnyE",
-		Name:    "Sahitya Aaj Tak 2025: सवयं से साक्षात्कार | Prem Rawat | Sahitya Aaj Tak | Aaj Tak",
+		Name:    "Sahitya Aaj Tak 2025: स्वयं से साक्षात्कार | Prem Rawat | Sahitya Aaj Tak | Aaj Tak",
 		Description: "दिल्ली की गुलाबी सर्दी के बीच मेजर ध्यानचंद स्टेडियम में आजतक के बेहद चर्चित कार्यक्रम साहित्य आजतक 2025 का आगाज हो चुका है." +
 			"शुक्रवार को कार्यक्रम के पहले दिन न्यूयॉर्क टाइम्स के बेस्टसेलर लेखकों में शुमार प्रेम रावत ने आज की भागती-दौड़ती जिंदगी में शांति और आनंद का मतलब समझाया.",
 		VideoDuration: time.Minute*43 + time.Second*49,
