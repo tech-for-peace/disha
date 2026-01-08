@@ -85,7 +85,14 @@ func (c *videoCache) download() error {
 	}
 	c.LastUpdated = time.Now()
 
-	customizeCache(c)
+	if err := customizeCache(c); err != nil {
+		return fmt.Errorf("error customizing cache: %w", err)
+	}
+
+	if err := customizeSpotifyCache(c); err != nil {
+		return fmt.Errorf("error customizing cache: %w", err)
+	}
+
 	return c.save()
 }
 
