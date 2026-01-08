@@ -8,7 +8,7 @@ import (
 // customizeCache applies manual corrections to cached video data after it has
 // been downloaded from external sources, allowing overrides of specific fields
 // (such as language) before the cache is used elsewhere in the application.
-func customizeCache(cache *videoCache) {
+func customizeCache(cache *videoCache) error {
 	// Language for this video is English.
 	// UXV4hcudGo0 & 1FVPtXv2pWU videos are in english
 	toEnglish := []string{"UXV4hcudGo0", "1FVPtXv2pWU"}
@@ -201,4 +201,6 @@ func customizeCache(cache *videoCache) {
 		ThumbnailURL:  "https://i.ytimg.com/vi/k845byCwFWg/hq720.jpg",
 		AudioOnly:     false,
 	})
+
+	return nil
 }
