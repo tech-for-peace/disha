@@ -14,7 +14,7 @@ import (
 //go:embed data/spotify.html
 var spotifyHTML []byte
 var sentenceBoundary = regexp.MustCompile(`([.!?])([A-Z])`)
-var spotifyPublishDate = time.Date(2026, time.January, 15, 0, 0, 0, 0, time.UTC)
+var spotifyPublishDate = time.Date(2026, time.January, 27, 0, 0, 0, 0, time.UTC)
 
 // customizeSpotifyCache adds Spotify podcast episodes to the cache
 func customizeSpotifyCache(cache *videoCache) error {
@@ -62,7 +62,7 @@ func parseEpisode(s *goquery.Selection) (*videoMeta, error) {
 	thumbnailURL := extractBestThumbnail(s)
 
 	dateText := strings.TrimSpace(
-		s.Find(".mVTn6QQxDKAnD1EMA4Uk [data-encore-id=text]").First().Text(),
+		s.Find(".IUdud5e6dwtIrdfU [data-encore-id=text]").First().Text(),
 	)
 	publishedAt, err := parseDate(dateText)
 	if err != nil {
